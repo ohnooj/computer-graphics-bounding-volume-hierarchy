@@ -40,6 +40,17 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ${{ matrix.apt }}
+          sudo apt-get install git
+          sudo apt-get install build-essential
+          sudo apt-get install cmake
+          sudo apt-get install libx11-dev
+          sudo apt-get install mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev
+          sudo apt-get install libxinerama1 libxinerama-dev
+          sudo apt-get install libxcursor-dev
+          sudo apt-get install libxrandr-dev
+          sudo apt-get install libxi-dev
+          sudo apt-get install libxmu-dev
+          sudo apt-get install libblas-dev
 
       - name: Configure
         shell: bash
@@ -65,9 +76,9 @@ jobs:
         run: |
           if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             exe="build/${{ matrix.build_type }}/rays.exe"
-            "$exe" --nogui
+            "$exe" --nogui data/rubber-ducky.obj
           else
-            ./build/rays --nogui
+            ./build/rays --nogui data/rubber-ducky.obj
           fi
 
       - name: Run binary (smoke) intersections
@@ -75,9 +86,9 @@ jobs:
         run: |
           if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             exe="build/${{ matrix.build_type }}/intersections.exe"
-            "$exe" --nogui
+            "$exe" --nogui data/knight.obj data/cheburashka.obj
           else
-            ./build/intersections --nogui
+            ./build/intersections --nogui data/knight.obj data/cheburashka.obj
           fi
 
       - name: Run binary (smoke) distances
