@@ -1,8 +1,8 @@
-# Computer Graphics – Bounding Volume Hierarchy 
+# Computer Graphics – Bounding Volume Hierarchy
 
 > **To get started:** Clone this repository and all its [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) dependencies using:
-> 
->     git clone --recursive https://github.com/dilevin/computer-graphics-bounding-volume-hierarchy.git
+>
+>     git clone --recursive git@github.com:ohnooj/computer-graphics-bounding-volume-hierarchy.git
 >
 > **Do not fork:** Clicking "Fork" will create a _public_ repository. If you'd like to use GitHub while you work on your assignment, then mirror this repo as a new _private_ repository: https://stackoverflow.com/questions/10065526/github-how-to-make-a-fork-of-public-repository-private
 
@@ -22,7 +22,7 @@
 >     sudo apt-get install libblas-dev
 
 
-## Background 
+## Background
 
 ### Read Section 12.3 of _Fundamentals of Computer Graphics (4th Edition)_.
 
@@ -31,7 +31,7 @@ around the triangles of a [rubber
 ducky](https://en.wikipedia.org/wiki/Rubber_duck)
 mesh.](images/rubber-ducky-aabb-tree.png)
 
-### Object partitioning 
+### Object partitioning
 
 In this assignment, you will build an Axis-Aligned Bounding-Box
 [Tree](https://en.wikipedia.org/wiki/Tree_structure) (AABB Tree). This is one of the simplest
@@ -144,7 +144,7 @@ d_r ← distance to root's box
 Q.insert(d_r, root)
 // initialize minimum distance seen so far
 d ← ∞
-while Q not empty 
+while Q not empty
   // d_s: distance from query to subtree's bounding box
   (d_s, subtree) ← Q.pop
   if d_s < d
@@ -239,7 +239,7 @@ version of your project use:
 mkdir build_release
 cd build_release
 cmake -DCMAKE_BUILD_TYPE=Release ..
-make 
+make
 ```
 
 In this assignment, we're aiming to improve the asymptotic complexity for the
@@ -297,7 +297,7 @@ a common _base case_ called `Object`.
 
 Using `std::dynamic_pointer_cast<>`, it is possible to _attempt_ to cast a
 `std::shared_ptr<>` to a base class instance into a `std::shared_ptr<>` of a
-subclass. This casting will only succeed if the underying instance actually is
+subclass. This casting will only succeed if the underlying instance actually is
 that subclass. Consider this self-contained example:
 
 ```
@@ -424,7 +424,7 @@ object but your tree algorithm is not finding it.
 
 Compute the nearest neighbor for a query in the set of <img src="/tex/55a049b8f161ae7cfeb0197d75aff967.svg?invert_in_darkmode&sanitize=true" align=middle width=9.86687624999999pt height=14.15524440000002pt/> points (rows of
 `points`). This should be a **_slow reference implementation_**. Aim for a
-computational complexity of <img src="/tex/1f08ccc9cd7309ba1e756c3d9345ad9f.svg?invert_in_darkmode&sanitize=true" align=middle width=35.64773519999999pt height=24.65753399999998pt/> but focus on correctness. 
+computational complexity of <img src="/tex/1f08ccc9cd7309ba1e756c3d9345ad9f.svg?invert_in_darkmode&sanitize=true" align=middle width=35.64773519999999pt height=24.65753399999998pt/> but focus on correctness.
 
 ### `src/point_box_squared_distance.cpp`
 
