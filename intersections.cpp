@@ -11,6 +11,7 @@
 #include <iostream>
 #include <iomanip> // std::setw
 #include <memory> // std::shared_ptr
+#include <string>
 
 #if defined(WIN32) || defined(_WIN32)
 #define PATH_SEPARATOR std::string("\\")
@@ -20,6 +21,28 @@
 
 int main(int argc, char * argv[])
 {
+  // Parse args
+  // --nogui _pathA _pathB
+  bool nogui = false;
+  std::string pathA, pathB;
+  for (int i = 1; i < argc; ++i)
+  {
+    std::string a = argv[i];
+    if (a == "--nogui")
+    {
+      nogui = true;
+    } else if (pathA.empty())
+    {
+      pathA = a;
+    } else if (pathB.empty())
+    {
+      pathB = a;
+    }
+  }
+  // Defaults if not provided
+  if (pathA.empty()) pathA = ".." + PATH_SEPARATOR + "data" + PATH_SEPARATOR + "knight.obj";
+  if (pathB.empty()) pathB = ".." + PATH_SEPARATOR + "data" + PATH_SEPARATOR + "cheburashka.obj";
+
   /////////////////////////////////////////////////////////////////////////////
   // TRIANGLE MESH INTERSECTION DETECTION
   /////////////////////////////////////////////////////////////////////////////
@@ -27,12 +50,21 @@ int main(int argc, char * argv[])
   // Read in a triangle mesh
   Eigen::MatrixXd VA;
   Eigen::MatrixXi FA;
-  igl::read_triangle_mesh(argc>1?argv[1]:".."+PATH_SEPARATOR+"data"+PATH_SEPARATOR+"knight.obj",VA,FA);
+  if (!igl::read_triangle_mesh(pathA, VA, FA))
+  {
+    std::cerr << "ERROR: could not open " << pathA << "\n";
+    return 1;
+  }
   std::cout<<"  |VA| "<<VA.rows()<<"  "<<std::endl;
   std::cout<<"  |FA| "<<FA.rows()<<"  "<<std::endl<<std::endl;
+
   Eigen::MatrixXd VB;
   Eigen::MatrixXi FB;
-  igl::read_triangle_mesh(argc>2?argv[2]:"../data/cheburashka.obj",VB,FB);
+  if (!igl::read_triangle_mesh(pathB,VB,FB))
+  {
+    std::cerr << "ERROR: could not open " << pathA << "\n";
+    return 1;
+  }
   std::cout<<"  |VB| "<<VB.rows()<<"  "<<std::endl;
   std::cout<<"  |FB| "<<FB.rows()<<"  "<<std::endl<<std::endl;
 
@@ -112,5 +144,12 @@ int main(int argc, char * argv[])
   diff_and_warn(  bf_pairs,"brute force",tree_pairs,"tree");
   diff_and_warn(tree_pairs,"tree",       bf_pairs,  "brute force");
 
-  visualize_aabbtree(VA,FA,VB,FB,leaf_pairs);
+  if (!nogui)
+  {
+    visualize_aabbtree(VA,FA,VB,FB,leaf_pairs);
+  } else
+  {
+    std::cout<<"Skipping visualization because --nogui was added."<<std::endl;
+  }
+  return 0;
 }

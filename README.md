@@ -251,6 +251,8 @@ clouds](https://en.wikipedia.org/wiki/Point_cloud) or real-world surface models.
 The AABB Tree algorithms should behave like <img src="/tex/f9bb6ecace3a663c4adf0544035b4da4.svg?invert_in_darkmode&sanitize=true" align=middle width=59.62030469999999pt height=24.65753399999998pt/> compared to brute
 force <img src="/tex/1f08ccc9cd7309ba1e756c3d9345ad9f.svg?invert_in_darkmode&sanitize=true" align=middle width=35.64773519999999pt height=24.65753399999998pt/> algorithms. For large inputs the difference should be striking.
 
+You can run each of the binaries with a `--nogui` flag to skip the visualization 
+and run only the algorithms.
 ## Tasks
 
 ### Whitelist

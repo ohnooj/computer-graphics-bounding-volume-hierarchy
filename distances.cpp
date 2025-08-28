@@ -16,15 +16,37 @@
 
 int main(int argc, char * argv[])
 {
+  // Parse args
+  // --nogui _points _queries
+  bool nogui = false;
+  int arg_points = -1, arg_queries = -1;
+  for (int i = 1; i < argc; ++i)
+  {
+    std::string a = argv[i];
+    if (a == "--nogui")
+    {
+      nogui = true;
+    } else if (arg_points == -1)
+    {
+      arg_points = std::stoi(a);
+    } else if (arg_queries == -1)
+    {
+      arg_queries = std::stoi(a);
+    }
+  }
+  // Defaults if not provided
+  if (arg_points == -1) arg_points = 100000;
+  if (arg_queries == -1) arg_queries = 10000;
+
   /////////////////////////////////////////////////////////////////////////////
   // POINT CLOUD DISTANCE QUERY
   /////////////////////////////////////////////////////////////////////////////
   std::cout<<"# Point Cloud Distance Queries"<<std::endl;
   // Prepare a random list of points in our set and random queries
   Eigen::MatrixXd points =  
-    Eigen::MatrixXd::Random(argc>1?std::stoi(argv[1]):100000,3);
+    Eigen::MatrixXd::Random(arg_points,3);
   Eigen::MatrixXd queries = 
-    Eigen::MatrixXd::Random(argc>2?std::stoi(argv[2]):10000,3);
+    Eigen::MatrixXd::Random(arg_queries,3);
 
   std::cout<<"    |points|: "<< points.rows()<<std::endl;
   std::cout<<"  |querires|: "<<queries.rows()<<std::endl<<std::endl;
@@ -81,6 +103,14 @@ int main(int argc, char * argv[])
     WARN_IF_NOT_EQUAL(bf_I,tree_I,i);
     WARN_IF_NOT_APPROX(bf_sqrD,tree_sqrD,i);
   }
-  visualize_aabbtree(points,root);
-  
+
+  if (!nogui)
+  {
+    visualize_aabbtree(points,root);
+  } else
+  {
+    std::cout<<"Skipping visualization because --nogui was added."<<std::endl;
+  }
+
+  return 0;
 }

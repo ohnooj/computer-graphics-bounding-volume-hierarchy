@@ -22,6 +22,29 @@
 
 int main(int argc, char * argv[])
 {
+  // Parse args
+  // --nogui _pathA
+  bool nogui = false;
+  std::string pathA;
+  int arg_rays = -1;
+  for (int i = 1; i < argc; ++i)
+  {
+    std::string a = argv[i];
+    if (a == "--nogui")
+    {
+      nogui = true;
+    } else if (pathA.empty())
+    {
+      pathA = a;
+    }else if (arg_rays == -1)
+    {
+      arg_rays = std::stoi(a);
+    }
+  }
+  // Defaults if not provided
+  if (pathA.empty()) pathA = ".." + PATH_SEPARATOR + "data" + PATH_SEPARATOR + "rubber-ducky.obj";
+  if (arg_rays == -1) arg_rays = 1000;
+
   /////////////////////////////////////////////////////////////////////////////
   // RAY TRIANGLE MESH INTERSECTION
   /////////////////////////////////////////////////////////////////////////////
@@ -29,12 +52,17 @@ int main(int argc, char * argv[])
   // Read in a triangle mesh
   Eigen::MatrixXd V;
   Eigen::MatrixXi F;
-  igl::read_triangle_mesh(argc>1?argv[1]:".."+PATH_SEPARATOR+"data"+PATH_SEPARATOR+"rubber-ducky.obj",V,F);
+  if (!igl::read_triangle_mesh(pathA,V,F))
+  {
+    std::cerr << "Error: could not read from mesh file " << pathA << std::endl;
+    return 1;
+  }
   std::cout<<"  |V| "<<V.rows()<<"  "<<std::endl;
   std::cout<<"  |F| "<<F.rows()<<"  "<<std::endl<<std::endl;
+
   // Make a bunch of random rays
   std::vector<Ray> rays;
-  rays.reserve(argc>2?std::stoi(argv[2]):1000);
+  rays.reserve(arg_rays);
   // Default bounds on ray
   double min_t = 0;
   double max_t = std::numeric_limits<double>::infinity();
@@ -106,5 +134,12 @@ int main(int argc, char * argv[])
   }
 
   // Visualize the tree
-  visualize_aabbtree(V,F,root);
+  if (!nogui)
+  {
+    visualize_aabbtree(V,F,root);
+  } else
+  {
+    std::cout<<"Skipping visualization because --nogui was added."<<std::endl;
+  }
+  return 0;
 }
